@@ -1,46 +1,54 @@
-<!--
- * @Author: lucidity99 lucidity929@163.com
- * @Date: 2023-06-02 11:00:11
- * @LastEditors: lucidity99 lucidity929@163.com
- * @LastEditTime: 2024-01-27 23:31:42
- * @FilePath: /mocha-vue3-system/src/components/MoDict.vue
- * @Description:
- *
- *
--->
 <template>
-  <el-tag :type="tagType" :class="tagClass" :effect="tagEffect">{{ label }}</el-tag>
+  <span v-if="item">
+    <span v-if="text">{{ item.label }}</span>
+    <el-tag
+      :type="$attrs.type || item.type"
+      :class="item.class"
+      :effect="$attrs.effect || item.effect"
+      v-else
+      >{{ item.label }}</el-tag
+    >
+  </span>
 </template>
 
-<script setup lang="ts">
-interface DictItem {
-  label: string
-  value: string
-  type?: string
-  class?: string
-  effect?: string
-}
-const props = withDefaults(
-  defineProps<{
-    value: string
-    dicts: DictItem[]
-  }>(),
-  {
-    value: '',
-    dicts: () => []
-  }
-)
+<script lang="ts" setup>
+import { ref, computed, watch, watchEffect } from 'vue'
+import { useDictStore } from '~/store/dict'
+import { DictItem } from '#/dict'
 
-let item = <DictItem>{}
-if (props.dicts) {
-  item = props.dicts.find((val: DictItem) => val.value === props.value) || {
-    label: props.value,
-    value: props.value
-  }
-}
+const useDict = useDictStore()
 
-const label = item.label
-const tagType = item.type || ''
-const tagClass = item.class || ''
-const tagEffect = item.effect || 'light'
+const props = defineProps({
+  value: {
+    type: String,
+    default: ''
+  },
+  // 根据 DictName 从接口/缓存获取字典数据集
+  dictName: {
+    type: String,
+    default: ''
+  },
+  // 使用自定义的字典数据集，不使用接口/缓存中
+  dictData: { type: Array },
+  text: { type: Boolean, default: false },
+  // 不使用缓存，实时获取获取
+  refresh: { type: Boolean, default: false }
+})
+
+const dictOptions = ref<DictItem[]>([])
+
+watchEffect(async () => {
+  // 优选使用自定义的 DictData
+  if (props.dictData) {
+    dictOptions.value = props.dictData
+  } else {
+    dictOptions.value = (await useDict.getDictData(props.dictName, props.refresh)) as DictItem[]
+  }
+})
+
+const item = computed<DictItem | undefined>(() => {
+  const tempItem = dictOptions.value?.find((item) => item.value === props.value)
+  if (tempItem) return tempItem
+  else return undefined
+})
 </script>

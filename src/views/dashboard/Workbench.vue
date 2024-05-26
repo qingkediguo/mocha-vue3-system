@@ -15,11 +15,11 @@
         </div>
         <div class="mr-10 text-right">
           <p class="mb-2 text-gray-400">项目</p>
-          <p class="text-xl">5</p>
+          <p class="text-xl"><MoCountTo :num="198" /></p>
         </div>
         <div class="text-right">
           <p class="mb-2 text-gray-400">应收</p>
-          <p class="text-xl">5000</p>
+          <p class="text-xl"><MoCountTo :num="2500" :precision="2" /></p>
         </div>
       </div>
     </div>
@@ -33,7 +33,11 @@
               <el-link v-auth="'super1'">查看更多</el-link>
             </div>
           </template>
-          <div v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</div>
+          <MoMoreText
+            text="Resize Observer API 提供了一种解决此类问题的解决方案，此外，它还使你能够轻松观察和响应元素内容或边框的大小变化，并以高效的方式做出响应。它为 Web 平台中经常讨论的，缺乏元素查询提供了 JavaScript 解决方案。
+用法很简单，并且与其他观察者（例如 Performance Observer 或者 Intersection Observer）几乎相同——你可以使用 ResizeObserver() 构造函数创建一个新的 ResizeObserver，然后使用 ResizeObserver.observe() 使其寻找特定元素大小的更改。每次更改大小时，构造函数中设置的回调函数便会运行，从而提供对新尺寸的访问，并允许你根据需要执行任何操作。"
+            :row="5"
+          />
         </el-card>
       </div>
       <div class="w-1/3">

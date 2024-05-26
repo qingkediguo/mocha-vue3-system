@@ -2,7 +2,7 @@
  * @Author: lucidity99 lucidity929@163.com
  * @Date: 2023-06-05 22:42:28
  * @LastEditors: lucidity99 lucidity929@163.com
- * @LastEditTime: 2024-01-27 14:42:34
+ * @LastEditTime: 2024-05-05 16:51:07
  * @FilePath: /mocha-vue3-system/vite.config.ts
  * @Description:
  *
@@ -120,6 +120,7 @@ export default ({ mode }) => {
     resolve: {
       alias: {
         '~/': `${path.resolve(__dirname, 'src')}/`,
+        '#/': `${path.resolve(__dirname, 'types')}/`,
         assets: `${path.resolve(__dirname, 'src/assets')}/`,
         'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js'
       }

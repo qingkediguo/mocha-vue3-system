@@ -24,15 +24,8 @@
 import { ref, reactive, onMounted } from 'vue'
 import * as echarts from 'echarts'
 import basicDataApi from '~/api/basicData' //基础资料接口
-import chinaMapData from './mapData/chinaMapData.json' //全国地图省份数据，自己取上面地址取
 import { ElMessage, ElNotification } from 'element-plus'
-import svg1 from './mapData/test'
-import bg from '~/assets/images/img.jpg'
-
-// const svg = `<?xml version='1.0' encoding='UTF-8' standalone='no'?>
-// <svg height="209.973mm" baseProfile="tiny" xmlns:cc="http://creativecommons.org/ns#" viewBox="0 0 3507 2480" width="296.926mm" version="1.2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-//    <path name="哈哈" style="fill: #082141; fill-opacity: 0.9; stroke: transparent;" d="M726.185,1048.18 L2493.04,328.351 L2591.2,1898.89 L1020.66,2226.08 L726.185,1048.18"/>
-// </svg>`
+import mapApi from '~/api/map'
 
 let myChart = ref()
 
@@ -48,7 +41,6 @@ let option = reactive({
   geo: [
     {
       map: 'js',
-      // aspectScale: 1,
       roam: true, // 是否允许缩放
       zoom: 1, // 默认显示级别
       center: [116.405285, 39.904989], // 地图中心点坐标
@@ -60,7 +52,6 @@ let option = reactive({
       itemStyle: {
         // 区域颜色
         areaColor: {
-          //image: bg,
           type: 'radial',
           x: 0.7,
           y: 0.5,
@@ -105,7 +96,6 @@ let option = reactive({
     {
       type: 'effectScatter',
       coordinateSystem: 'geo',
-      //symbol: 'diamond',
       showEffectOn: 'render',
       rippleEffect: {
         period: 10,
@@ -175,7 +165,25 @@ let popTop = ref(0) //弹窗Y轴距离
 let name = ref('') //当前点击省份
 let tableData = ref([]) //table数据
 
-onMounted(() => {
+interface mapData {
+  features: mapFeature[]
+  type: string
+}
+interface mapFeature {
+  geometry: { coordinates: []; type: string }
+  properties: { name: string; level: string }
+}
+
+let chinaMapData: mapData | null = null
+async function getChinaMapData() {
+  await mapApi.fetchChinaMapData().then((res: any) => {
+    chinaMapData = res
+  })
+}
+
+onMounted(async () => {
+  await getChinaMapData()
+
   // 渲染地图
   drawMap(chinaMapData, 0, [126.82862, 49.296976])
   getProvinceCode() //处理全国省份数据
@@ -220,6 +228,7 @@ function setMapCenterZoomData(data, zoom, center) {
 }
 // 渲染地图
 async function drawMap(json, type = 0, city) {
+  console.log('json', json)
   // 防止echarts重复
   const dom = document.getElementById('bmapChartBox')
   if (!dom) {
@@ -230,20 +239,7 @@ async function drawMap(json, type = 0, city) {
 
   myChart.value = echarts.init(dom)
 
-  fetch(
-    //'https://img.alicdn.com/imgextra/i3/O1CN0127O3dX20W68RLghAG_!!6000000006856-2-tps-662-108.png'
-    'https://echarts.apache.org/examples/data/asset/geo/Sicily_prehellenic_topographic_map.svg',
-    {
-      mode: 'no-cors'
-    }
-  )
-    .then((response) => response.blob())
-    .then((myBlob) => {
-      console.log(myBlob)
-    })
-
   echarts.registerMap('js', json)
-  // echarts.registerMap('js', { svg: svg1 })
 
   if (type == 1) {
     //地图点击进入

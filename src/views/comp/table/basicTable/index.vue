@@ -49,11 +49,15 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" align="center" fixed />
-        <el-table-column prop="name" label="客户名称" min-width="200" show-overflow-tooltip fixed />
+        <el-table-column prop="name" label="客户名称" min-width="200" show-overflow-tooltip fixed>
+          <template #default="{ row }">
+            <MoOverTooltip :text="row.name" :row="2" />
+          </template>
+        </el-table-column>
         <el-table-column prop="source" label="客户来源" min-width="100" />
         <el-table-column label="客户类型" min-width="100">
           <template #default="scope">
-            <MoDict :value="scope.row.type" :dicts="dicts.clientType" />
+            <MoDict :value="scope.row.type" dictName="clientType" refresh />
           </template>
         </el-table-column>
         <el-table-column prop="mobile" label="手机" min-width="200" #default="{ row }">
@@ -69,7 +73,7 @@
 
         <el-table-column label="状态">
           <template #default="scope">
-            <MoDict :value="scope.row.status" :dicts="dicts.status" />
+            <MoDict :value="scope.row.status" dictName="status" />
           </template>
         </el-table-column>
         <el-table-column prop="address" label="地址" min-width="150" show-overflow-tooltip />
@@ -100,9 +104,9 @@
 import { ref, reactive } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { useTable } from '~/hooks/useTable'
-import { useDict } from '~/hooks/useDict'
 import clientApi from '~/api/client'
 import EditableInput from '~/components/EditableInput.vue'
+import MoOverTooltip from '~/components/MoOverTooltip.vue'
 
 let moreVisible = ref(false)
 
@@ -126,8 +130,6 @@ const {
   handleDelete,
   handleSelectionChange
 } = useTable(clientApi.getClientList, queryForm, clientApi.deleteClient)
-
-let { dicts } = useDict(['status', 'clientType'])
 </script>
 
 <style scoped></style>

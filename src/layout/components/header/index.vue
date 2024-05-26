@@ -62,7 +62,7 @@
 import { onMounted, reactive, ref } from 'vue'
 import { useSidebarStore } from '~/store/sidebar'
 import { useRouter } from 'vue-router'
-import { SelectOptionItem } from '~/types/index'
+import { SelectOptionItem } from '#/index'
 import { useDark, useToggle } from '@vueuse/core'
 import { Sunny, Moon } from '@element-plus/icons-vue'
 import imgurl from '~/assets/images/img.jpg'

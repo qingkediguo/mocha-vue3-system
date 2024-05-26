@@ -2,7 +2,7 @@
  * @Author: lucidity99 lucidity929@163.com
  * @Date: 2023-04-23 13:20:11
  * @LastEditors: lucidity99 lucidity929@163.com
- * @LastEditTime: 2023-11-09 13:28:43
+ * @LastEditTime: 2024-05-05 13:45:03
  * @FilePath: /mocha-vue3-system/src/router/modules/comp.ts
  * @Description:
  *
@@ -32,6 +32,23 @@ const routes: RouteRecordRaw[] = [
         },
         component: () =>
           import(/* webpackChunkName: "upload" */ '~/views/comp/infiniteList/index.vue')
+      },
+      {
+        path: 'dict',
+        name: 'dict',
+        meta: {
+          title: 'dict'
+        },
+        children: [
+          {
+            path: 'dictTag',
+            name: 'dictTag',
+            meta: {
+              title: '字典标签'
+            },
+            component: () => import('~/views/comp/dictComp/dictTag.vue')
+          }
+        ]
       },
       {
         path: 'table',
