@@ -2,7 +2,7 @@
  * @Author: lucidity99 lucidity929@163.com
  * @Date: 2023-06-05 22:42:28
  * @LastEditors: lucidity99 lucidity929@163.com
- * @LastEditTime: 2023-10-26 14:05:13
+ * @LastEditTime: 2024-05-26 22:50:39
  * @FilePath: /mocha-vue3-system/src/router/modules/feat.ts
  * @Description:
  *
@@ -108,6 +108,14 @@ const routes: RouteRecordRaw[] = [
           title: 'GSAP'
         },
         component: () => import(/* webpackChunkName: "feat" */ '~/views/feat/GSAP.vue')
+      },
+      {
+        path: 'highlight',
+        name: 'highlight',
+        meta: {
+          title: 'CSS 高亮'
+        },
+        component: () => import(/* webpackChunkName: "feat" */ '~/views/feat/highlight.vue')
       }
     ]
   }

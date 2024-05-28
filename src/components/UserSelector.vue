@@ -1,26 +1,30 @@
 <template>
   <el-select
     v-model="value"
-    filterable
-    remote
     reserve-keyword
     placeholder="输入关键字选择"
     :remote-method="remoteMethod"
     :loading="loading"
     clearable
-    popper-class="my-selector-user"
+    filterable
+    remote
   >
     <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
-    <div class="h-10 w-120"></div>
-    <Pagination
-      :small="true"
-      layout="prev, pager, next"
-      v-model:page="pagination.pageNum"
-      v-model:size="pagination.pageSize"
-      :total="total"
-      @pagination="getData"
-      class="absolute bottom-0 left-0 right-0 justify-center p-2 bg-white"
-    />
+
+    <template #footer>
+      <Pagination
+        :small="true"
+        layout="prev, pager, next"
+        v-model:page="pagination.pageNum"
+        v-model:size="pagination.pageSize"
+        :total="total"
+        @pagination="getData"
+        class="justify-center h-10 p-2 bg-white"
+      />
+    </template>
+    <template #loading>
+      <div v-loading="loading" element-loading-text="加载中" class="h-20"></div>
+    </template>
   </el-select>
 </template>
 
@@ -83,9 +87,3 @@ const remoteMethod = (query: string) => {
   }
 }
 </script>
-
-<style>
-.my-selector-user .el-select-dropdown__wrap {
-  max-height: none !important;
-}
-</style>
