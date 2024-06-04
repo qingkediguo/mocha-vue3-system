@@ -1,7 +1,14 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
 
-export function useTable(loadDataFunc: Function, queryForm: {}, deleteDataFunc?: Function) {
+export function useTable(
+  loadDataFunc: Function,
+  queryForm: {},
+  deleteDataFunc?: Function,
+  options?: {
+    immediate?: boolean
+  }
+) {
   let loading = ref(true)
   let tableData = ref()
   let total = ref(0)
@@ -14,13 +21,15 @@ export function useTable(loadDataFunc: Function, queryForm: {}, deleteDataFunc?:
   const getData = async () => {
     loading.value = true
     const res = await loadDataFunc({ ...queryForm, ...pagination })
+    console.log(res, pagination)
     tableData.value = res.list
     total.value = res.total
     loading.value = false
   }
 
   onMounted(() => {
-    getData()
+    console.log(options?.immediate, options?.immediate !== false)
+    if (options?.immediate === undefined || options?.immediate === true) getData()
   })
 
   // 搜索
@@ -82,6 +91,7 @@ export function useTable(loadDataFunc: Function, queryForm: {}, deleteDataFunc?:
     tableData,
     total,
     pagination,
+    multipleSelection,
     getData,
     handleSearch,
     handleExport,

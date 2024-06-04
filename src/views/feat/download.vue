@@ -63,6 +63,20 @@ const exportXlsx = () => {
   XLSX.utils.book_append_sheet(new_workbook, WorkSheet, '第一页')
   XLSX.writeFile(new_workbook, `表格.xlsx`)
 }
+
+const pageSize = '20'
+const page = 2
+
+const arr = Array.from({ length: parseInt(pageSize) }, (_, i) => 1 + i)
+console.log(arr)
+const result = {
+  list: arr.map(function (id) {
+    return {
+      id: parseInt(pageSize) * page + id
+    }
+  })
+}
+console.log(result)
 </script>
 
 <style scoped>

@@ -2,7 +2,7 @@
  * @Author: lucidity99 lucidity929@163.com
  * @Date: 2023-06-05 22:42:28
  * @LastEditors: lucidity99 lucidity929@163.com
- * @LastEditTime: 2024-05-26 22:50:39
+ * @LastEditTime: 2024-05-30 22:00:19
  * @FilePath: /mocha-vue3-system/src/router/modules/feat.ts
  * @Description:
  *
@@ -113,7 +113,7 @@ const routes: RouteRecordRaw[] = [
         path: 'highlight',
         name: 'highlight',
         meta: {
-          title: 'CSS 高亮'
+          title: 'cssHighlight'
         },
         component: () => import(/* webpackChunkName: "feat" */ '~/views/feat/highlight.vue')
       }

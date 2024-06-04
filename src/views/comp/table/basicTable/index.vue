@@ -34,11 +34,21 @@
         <i-ep-bottom-right />{{ moreVisible ? '展开' : '收起' }}</span
       >
     </div>
+    <el-dialog width="1000px" v-model="visible" title="已选数据">
+      <ul>
+        <li v-for="item in multipleSelection" :key="item.id">
+          {{ item.id }} {{ item.name }}
+          <el-icon @click="handleDeleteItem(item)"><Close /></el-icon>
+        </li>
+      </ul>
+    </el-dialog>
     <el-card>
       <div class="flex mb-1">
         <el-button @click="handleDelete()" type="danger" plain size="small">删除</el-button
         ><el-button @click="handleExport" size="small">导出</el-button>
+        <span @click="visible = true">（已选 {{ multipleSelection.length }}）</span>
       </div>
+
       <el-table
         :data="tableData"
         border
@@ -46,9 +56,10 @@
         ref="multipleTable"
         v-adaptive
         v-loading="loading"
+        :row-key="(row) => row.id"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" align="center" fixed />
+        <el-table-column type="selection" :reserve-selection="true" align="center" fixed />
         <el-table-column prop="name" label="客户名称" min-width="200" show-overflow-tooltip fixed>
           <template #default="{ row }">
             <MoOverTooltip :text="row.name" :row="2" />
@@ -102,7 +113,7 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-import { Search } from '@element-plus/icons-vue'
+import { Search, Close } from '@element-plus/icons-vue'
 import { useTable } from '~/hooks/useTable'
 import clientApi from '~/api/client'
 import EditableInput from '~/components/EditableInput.vue'
@@ -128,8 +139,15 @@ const {
   handleSearch,
   handleExport,
   handleDelete,
-  handleSelectionChange
+  handleSelectionChange,
+  multipleSelection
 } = useTable(clientApi.getClientList, queryForm, clientApi.deleteClient)
+
+const visible = ref(false)
+const multipleTable = ref()
+const handleDeleteItem = (item) => {
+  multipleTable.value.toggleRowSelection(item, false)
+}
 </script>
 
 <style scoped></style>

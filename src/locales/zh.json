@@ -60,6 +60,7 @@
     "about": "关于",
     "demo": "示例",
     "jsx": "jsx",
-    "provideAndInject": "依赖注入"
+    "provideAndInject": "依赖注入",
+    "cssHighlight": "CSS 高亮"
   }
 }

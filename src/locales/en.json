@@ -60,6 +60,7 @@
     "about": "About",
     "demo": "Demo",
     "jsx": "jsx",
-    "provideAndInject": "Provide/Inject"
+    "provideAndInject": "Provide/Inject",
+    "cssHighlight": "CSS Highlight"
   }
 }
